@@ -30,6 +30,17 @@ app.get("/secret", (req,res) => {
     }
 });
 
+app.post("/login", (req, res) => {
+    const username = req.query.username;
+    const password = req.query.password;
+    requests++;
+    if (username == "joe" && password == "123") {
+      res.send("Hello Joe!");
+    } else {
+      res.send("Invalid credentials!");
+    }
+  });
+
 app.use(cors());
 
 console.log(uuid());
