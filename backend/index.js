@@ -1,49 +1,64 @@
 import Express from "express";
 import cors from "cors";
 import { v4 as uuid } from "uuid";
+import session from "express-session";
+
+//Session Config
+const config = {
+  genid: (req) => uuid(),
+  secret: "keyboard cat",
+  cookie: {},
+  resave: false,
+  saveUninitialized: true,
+}
 
 const app = Express();
+app.use(cors());
+app.use(session(config));
+
 const PORT = 3001;
-
-// app.get("/hello", (req,res) => {
-//     const username = req.query.username;
-//     const password = req.query.password;
-//     console.log(username + " " + password);
-//     if( username == "joe" && password == "123"){
-//         res.send("Hola Joe");
-//     }else{
-//         res.send("Not Joe");
-//     }
-// });
-
-const secretToken = uuid();
 let requests = 0;
+const secretToken = uuid();
 
-//25ff5d94-183a-4062-ac4c-3e56351e5d3c
-app.get("/secret", (req,res) => {
-    const token = req.query.token;
-    requests++;
-    if( token == secretToken){
-        res.send({code: 200, requests: requests, message:"Hola Secret"});
-    }else{
-        res.send({code: 401, message:"Invalid token"});
-    }
+app.get("/secret", (req, res) => {
+  const token = req.query.token;
+  requests++;
+  if (token === secretToken) {
+    res.send({
+      result: 200,
+      requests: requests,
+      message: "This is a very secret message.",
+    });
+  } else {
+    res.send({ result: 401, message: "Invalid token!" });
+  }
 });
 
 app.post("/login", (req, res) => {
-    const username = req.query.username;
-    const password = req.query.password;
-    requests++;
-    if (username == "joe" && password == "123") {
-      res.send("Hello Joe!");
-    } else {
-      res.send("Invalid credentials!");
-    }
-  });
+  const email = req.query.email;
+  const password = req.query.password;
+  requests++;
+  if (email == "test@test.com" && password == "123") {
+    res.send({ result: "success", email: "test@test.com", name: "Name here" });
+  } else {
+    res.send({ result: "fail" });
+  }
+});
 
-app.use(cors());
+app.post("/register", (req, res) => {
+  const valid = req.query.valid;
+  const name = req.query.name;
+  const email = req.query.email;
+  const password = req.query.password;
 
-console.log(uuid());
+  res.send({ result: "success", name: name, email: email, password: password})
+  // if (email == "test@test.com" && password == "123") {
+  //   res.send({ result: "success", email: "test@test.com", name: "Name here" });
+  // } else {
+  //   res.send({ result: "fail" });
+  // }
+});
 
-app.listen(PORT, () =>
-    console.log("Server Listening on port: " + PORT));
+console.log(secretToken);
+
+app.listen(PORT, () => console.log("Server Listening on port: " + PORT));

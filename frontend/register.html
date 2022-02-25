@@ -37,7 +37,11 @@
         <div class= "row">
         <form class="col-xl-4 col-lg-4 col-md-6 mx-auto">
           <div class="mb-3">
-            <label>Login</label>
+            <label>Register</label>
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name">
           </div>  
           <div class="mb-3">
             <label for="email" class="form-label">Email address</label>
@@ -47,10 +51,14 @@
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password">
           </div>
-          <div class="mb-3 form-register">
-            <a href="/frontend/register.html">Not yet registered? Register here!</a>
+          <div class="mb-3">
+            <label for="passwordAgain" class="form-label">Re-type Password</label>
+            <input type="password" class="form-control" id="passwordAgain">
           </div>
-          <button type="button" class="btn btn-primary" onclick="submitLoginInfo()">Login</button>
+          <div class="mb-3 form-register">
+            <a href="/frontend/login.html">Already registered? Login here!</a>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="submitRegisterInfo()">Register</button>
         </form>
       </div>
        </div>
