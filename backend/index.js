@@ -2,6 +2,7 @@ import Express from "express";
 import cors from "cors";
 import { v4 as uuid } from "uuid";
 import session from "express-session";
+import { CreateUser } from db.js;
 
 //Session Config
 const config = {
@@ -46,17 +47,18 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const valid = req.query.valid;
   const name = req.query.name;
+  const surname = req.query.surname;
   const email = req.query.email;
   const password = req.query.password;
+  requests++;
 
-  res.send({ result: "success", name: name, email: email, password: password})
-  // if (email == "test@test.com" && password == "123") {
-  //   res.send({ result: "success", email: "test@test.com", name: "Name here" });
-  // } else {
-  //   res.send({ result: "fail" });
-  // }
+  CreateUser(name, surname, email, password).then((r) => {
+    console.log(r);
+  })
+  
+  res.send({ result: "success", name: name, surname: surname, email: email})
+
 });
 
 console.log(secretToken);

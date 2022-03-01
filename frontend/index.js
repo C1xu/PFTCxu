@@ -25,6 +25,7 @@ async function submitLoginInfo(){
 
 async function submitRegisterInfo(){
     const name = document.getElementById("name").value;
+    const surname = document.getElementById("surname").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const passwordAgain = document.getElementById("passwordAgain").value;
@@ -55,6 +56,7 @@ async function submitRegisterInfo(){
     if(validateEmail(email) &&
      passwordAgain === password && 
      name!== "" && validateName(name) &&
+     surname!== "" && validateName(surname) &&
      password!== "" && validatePasswordStrength(password)){
         const headers = {
             "Content-Type": "text/html",
