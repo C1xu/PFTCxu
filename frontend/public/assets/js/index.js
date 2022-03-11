@@ -29,7 +29,7 @@ async function submitRegisterInfo(){
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const passwordAgain = document.getElementById("passwordAgain").value;
-    const url = "http://localhost:3001/register?name=" + name + "&email=" + email + "&password=" + password;
+    const url = "http://localhost:3001/register?name=" + name +"&surname="+ surname + "&email="+ email + "&password=" + password;
 
     const validateEmail = (email) => {
         return String(email)
@@ -73,4 +73,19 @@ async function submitRegisterInfo(){
     }else{
         console.log("Invalid fields");
     }
+}
+
+function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  }
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
 }
