@@ -23,7 +23,7 @@ app.use(cors());
 app.use(session(config));
 app.use(Express.static(path.join(__dirname, "../frontend/public/")));
 
-const PORT = 3001;
+const PORT = 80;
 let requests = 0;
 //const secretToken = uuid();
 
