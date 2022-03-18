@@ -54,7 +54,7 @@ const startServerEncrypted = async () => {
   });
 
   const [pub] = await sm.accessSecretVersion({
-    name: "",
+    name: "projects/782692281082/secrets/PublicKey/versions/1",
   });
 
   const [prvt] = await sm.accessSecretVersion({
