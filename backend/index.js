@@ -2,9 +2,13 @@ import Express from "express";
 import cors from "cors";
 import { v4 as uuid } from "uuid";
 import session from "express-session";
-import { CreateUser, GetUser, HashPassword } from "./db.js";
+import { CreateUser, GetUser, HashPassword, GOOGLE_APPLICATION_CREDITIALS } from "./db.js";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
+import https from "https";
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
+
+const PORT = 443; //Https port //80 Http port
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,9 +26,7 @@ const app = Express();
 app.use(cors());
 app.use(session(config));
 app.use(Express.static(path.join(__dirname, "../frontend/public/")));
-
-const PORT = 80;
-let requests = 0;
+//let requests = 0;
 //const secretToken = uuid();
 
 // app.get("/secret", (req, res) => {
@@ -40,6 +42,34 @@ let requests = 0;
 //     res.send({ result: 401, message: "Invalid token!" });
 //   }
 // });
+
+const startServer = () => {
+  app.listen(PORT, () => console.log("Server Listening on port: " + PORT));
+};
+
+const startServerEncrypted = async () => {
+  const sm = new SecretManagerServiceClient({
+    projectId: "pftcxu",
+    keyFilename: GOOGLE_APPLICATION_CREDITIALS,
+  });
+
+  const [pub] = await sm.accessSecretVersion({
+    name: "",
+  });
+
+  const [prvt] = await sm.accessSecretVersion({
+    name: "projects/782692281082/secrets/PrivateKey/versions/1",
+  });
+
+  const sslOptions = {
+    key: prvt.payload.data.toString(),
+    cert: pub.payload.data.toString(),
+  };
+
+  https.createServer(sslOptions, app).listen(PORT, () => {
+    console.log("Secure Server Listening on port:" + PORT);
+  });
+};
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
@@ -96,4 +126,4 @@ app.post("/register", (req, res) => {
 
 //console.log(secretToken);
 
-app.listen(PORT, () => console.log("Server Listening on port: " + PORT));
+startServerEncrypted();
